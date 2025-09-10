@@ -104,7 +104,7 @@ export default function Home() {
     // </div>
     
     
-    <div className={`h-screen bg-slate-950 text-white ${font.className} antialiased`}> 
+    <div className={`h-screen bg-primary text-white ${font.className} antialiased`}> 
       <Suspense>
         <Navbar />
       </Suspense>
