@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { font } from "./fonts";
 
 const Navbar = () => {
     return ( <header>
           <nav className="flex flex-col md:flex-row items-center justify-between gap-4 p-6 text-2xl align-text-bottom">
-            <Link href="/" className="font-semibold text-3xl ">
+            <Link href="/" className={`font-semibold text-3xl ${font.className}`}>
               Mynance
             </Link>
             <div className="flex gap-4">

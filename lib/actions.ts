@@ -1,7 +1,7 @@
 "use server";
 
 import { registerSchema } from "./schemas";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
@@ -57,10 +57,16 @@ export async function signUp(state: FormState, formData: FormData) {
     }
 
     try {
-        await db.user.create({
+        const user = await db.user.create({
             data: {
                 email,
                 password: hashedPassword,
+            },
+        });
+
+        await db.balance.create({
+            data: {
+                userId: user.id,
             },
         });
     } catch (e) {
@@ -76,4 +82,8 @@ export async function signUp(state: FormState, formData: FormData) {
     });
 
     return { message: "Successfully created account" };
+}
+
+export async function logout() {
+    await signOut();
 }

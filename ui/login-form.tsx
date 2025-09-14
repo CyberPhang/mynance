@@ -49,7 +49,7 @@ const LoginForm = () => {
                 <CardHeader>
                     <span className="flex flex-col items-center justify-center gap-2">
                         <span className={`${font.className} text-3xl`}>
-                            <CardTitle>Mynance</CardTitle>
+                            <CardTitle>Welcome Back</CardTitle>
                         </span>
                         <CardDescription>Enter your credentials.</CardDescription>
                     </span>

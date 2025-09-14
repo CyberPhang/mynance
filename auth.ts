@@ -55,4 +55,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }   
         })
     ],
+    callbacks: {
+        jwt({ token, user }) {
+            if (user) { // User is available during sign-in
+                token.id = user.id;
+            }
+            return token;
+        },
+        session({ session, token }) {
+            if (typeof token.id !== "string") {
+                throw new Error("Something went wrong");
+            }
+            session.user.id = token.id;
+            return session;
+        },
+    }
 });

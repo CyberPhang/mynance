@@ -48,3 +48,24 @@ model Account {
  
   @@id([provider, providerAccountId])
 }
+
+model Income {
+  id         String   @id @default(cuid())
+  userId     String
+  createdAt  DateTime @default(now())
+  amount     Decimal
+  category   String
+}
+
+model Expense {
+  id         String   @id @default(cuid())
+  userId     String
+  createdAt  DateTime @default(now())
+  amount     Decimal
+  category   String
+}
+
+model Balance {
+  userId     String   @id 
+  amount     Decimal  @default(0)
+}
