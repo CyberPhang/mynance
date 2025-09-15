@@ -1,10 +1,11 @@
 "use server";
 
-import { registerSchema } from "./schemas";
-import { signIn, signOut } from "@/auth";
+import { registerSchema, newDepositSchema } from "./schemas";
+import { auth, signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
+import { revalidatePath } from "next/cache";
 
 export async function authenticate(
     prevState: string | undefined,
@@ -30,7 +31,6 @@ type FormState = | {
         email?: string[]
         password?: string[]
     },
-    message?: string,
 } | undefined
 
 export async function signUp(state: FormState, formData: FormData) {
@@ -67,8 +67,10 @@ export async function signUp(state: FormState, formData: FormData) {
         await db.balance.create({
             data: {
                 userId: user.id,
+                amount: 0,
             },
         });
+
     } catch (e) {
         return {
             message: "An error occurred while creating your account: " + e, 
@@ -86,4 +88,58 @@ export async function signUp(state: FormState, formData: FormData) {
 
 export async function logout() {
     await signOut();
+}
+
+type DepositFormState = | {
+    errors?: {
+        amount?: string[]
+        category?: string[]
+    },
+    message?: string,
+} | undefined
+
+export async function createNewDeposit(state: DepositFormState, formData: FormData) {
+    const values = {
+        amount: Number(formData.get("amount")),
+        category: formData.get("category"),
+    };
+
+    console.log("Action invoked");
+
+    const validatedFields = newDepositSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { errors: validatedFields.error.flatten().fieldErrors };
+    }
+
+    const session = await auth();
+
+    if (!session || !session.user || !session.user.id) {
+        return { message: "Something went wrong" };
+    }
+
+    const { amount, category } = validatedFields.data;
+
+    await db.balance.update({
+        where: {
+            userId: session.user.id,
+        },
+        data: {
+            amount: {
+                increment: amount
+            }
+        }
+    });
+
+    await db.income.create({
+        data: {
+            userId: session.user.id,
+            amount,
+            category,
+        }
+    });
+
+    revalidatePath("/dashboard/income");
+    
+    return { message: "Successfully deposited income" };
 }

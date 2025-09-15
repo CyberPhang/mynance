@@ -9,7 +9,7 @@ import {
     ChartTooltip,
     ChartTooltipContent
 } from "@/components/ui/chart";
-import { Pie, PieChart } from "recharts";
+import { Cell, Pie, PieChart } from "recharts";
 
 type ExpenseCategoryChartProps = {
     expenseCategories: { 
@@ -19,6 +19,29 @@ type ExpenseCategoryChartProps = {
 };
 
 const ExpenseCategoryChart = (props: ExpenseCategoryChartProps) => {
+    type expenseCategoryConfigType = {
+        housing: {
+            label: string,
+            color: string,
+        },
+        groceries: {
+            label: string,
+            color: string,
+        },
+        entertainment: {
+            label: string,
+            color: string,
+        },
+        transportation: {
+            label: string,
+            color: string,
+        },
+        other: {
+            label: string,
+            color: string,
+        },
+    };
+
     const expenseCategoryConfig = {
         housing: {
             label: "Housing, Utilities",
@@ -86,7 +109,14 @@ const ExpenseCategoryChart = (props: ExpenseCategoryChartProps) => {
                             data={expenseCategoryData} 
                             dataKey="amount" 
                             nameKey="type"
-                        />
+                        >
+                            {expenseCategoryData.map((entry, index) => (
+                                <Cell 
+                                    key={`cell-${entry.type}`} 
+                                    fill={expenseCategoryConfig[entry.type as keyof expenseCategoryConfigType].color} 
+                                />
+                            ))}
+                        </Pie>
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <ChartLegend content={<ChartLegendContent />}/>
                     </PieChart>

@@ -56,50 +56,50 @@ const LoginForm = () => {
                     <CardAction></CardAction>
                 </CardHeader>
                 <CardContent>
-                        <Form {...form}>
-                            <form className="flex flex-col gap-4" action={formAction}>
-                                <FormField 
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="font-semibold">Email</FormLabel>
-                                            <FormControl>
-                                                <Input 
-                                                    type="email"
-                                                    placeholder="john.doe@example.com"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField 
-                                    control={form.control}
-                                    name="password"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel className="font-semibold">Password</FormLabel>
-                                            <FormControl>
-                                                <Input 
-                                                    type="password"
-                                                    placeholder="******"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage>{errorMessage}</FormMessage>
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button className="w-full cursor-pointer" type="submit" disabled={isPending}>
-                                    Login
-                                </Button>
-                                {/* <Button className="w-full cursor-pointer" variant="outline">
-                                    <FcGoogle />
-                                </Button> */}
-                            </form>
-                        </Form>
+                    <Form {...form}>
+                        <form className="flex flex-col gap-4" action={formAction}>
+                            <FormField 
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="font-semibold">Email</FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                type="email"
+                                                placeholder="john.doe@example.com"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField 
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="font-semibold">Password</FormLabel>
+                                        <FormControl>
+                                            <Input 
+                                                type="password"
+                                                placeholder="******"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage>{errorMessage}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+                            <Button className="w-full cursor-pointer" type="submit" disabled={isPending}>
+                                Login
+                            </Button>
+                            {/* <Button className="w-full cursor-pointer" variant="outline">
+                                <FcGoogle />
+                            </Button> */}
+                        </form>
+                    </Form>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-2">
                     <Button className="w-full cursor-pointer text-muted-foreground" variant="link" asChild>

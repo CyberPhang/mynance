@@ -15,3 +15,8 @@ export const registerSchema = z.object({
         error: "Password must be fewer than 32 characters."
     }),
 })
+
+export const newDepositSchema = z.object({
+    amount: z.number().gt(0),
+    category: z.string()
+});

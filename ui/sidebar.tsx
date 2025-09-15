@@ -79,8 +79,10 @@ const AppSidebar = (props: AppSidebarProps) => {
                   <DropdownMenuItem>
                     <form action={logout}>
                         <Button type="submit" variant={"ghost"} asChild>
-                            <PowerIcon />
-                            Sign out
+                            <button type="submit">
+                                <PowerIcon /> 
+                                Sign out
+                            </button>
                         </Button>
                     </form>
                   </DropdownMenuItem>

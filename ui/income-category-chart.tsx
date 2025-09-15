@@ -9,7 +9,7 @@ import {
     ChartLegend,
     ChartLegendContent,
 } from "@/components/ui/chart";
-import { Pie, PieChart } from "recharts";
+import { Cell, Pie, PieChart } from "recharts";
 
 type IncomeCategoryChartProps = {
     incomeCategories: { 
@@ -19,12 +19,29 @@ type IncomeCategoryChartProps = {
 };
 
 const IncomeCategoryChart = (props: IncomeCategoryChartProps) => {
-
-    // TODO: find way to use colors
+    type incomeCategoryConfigType = {
+        earned: {
+            label: string,
+            color: string,
+        },
+        investments: {
+            label: string,
+            color: string,
+        },
+        passive: {
+            label: string,
+            color: string,
+        },
+        other: {
+            label: string,
+            color: string,
+        },
+    };
+    
     const incomeCategoryConfig = {
         earned: {
             label: "Earned",
-            color: "f54a00",
+            color: "#f54a00",
         },
         investments: {
             label: "Investments",
@@ -80,8 +97,14 @@ const IncomeCategoryChart = (props: IncomeCategoryChartProps) => {
                             data={incomeCategoryData} 
                             dataKey="amount" 
                             nameKey="type"
-                            
-                        />
+                        >
+                            {incomeCategoryData.map((entry, index) => (
+                                <Cell 
+                                    key={`cell-${entry.type}`}
+                                    fill={incomeCategoryConfig[entry.type as keyof incomeCategoryConfigType].color}
+                                />
+                            ))}
+                        </Pie>
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <ChartLegend content={<ChartLegendContent />}/>
                     </PieChart>
