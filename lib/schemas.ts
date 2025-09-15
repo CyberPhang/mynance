@@ -16,7 +16,7 @@ export const registerSchema = z.object({
     }),
 })
 
-export const newDepositSchema = z.object({
+export const newTransactionSchema = z.object({
     amount: z.number().gt(0),
     category: z.string()
 });

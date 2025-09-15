@@ -1,26 +1,26 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAllIncomeCategories } from "@/lib/db";
-import Deposits from "@/ui/tables/deposits";
-import IncomeCard from "@/ui/income-card";
-import IncomeCategoryChart from "@/ui/income-category-chart";
+import { getAllExpenseCategories } from "@/lib/db";
+import Expenses from "@/ui/tables/expenses";
+import ExpenseCategoryChart from "@/ui/expense-category-chart";
 import { Suspense } from "react";
-import { NewDepositForm } from "@/ui/new-deposit-form";
+import { NewExpenseForm } from "@/ui/new-expense-form";
+import ExpenseCard from "@/ui/expense-card";
 
-const IncomePage = async () => {
-    const incomeCategories = await getAllIncomeCategories();
+const ExpensePage = async () => {
+    const expenseCategories = await getAllExpenseCategories();
 
     return ( 
         <div className="flex w-screen h-screen items-center justify-center ">
             <div className="flex flex-col w-[90%] h-[90%] gap-12">
                 <div className="flex flex-row justify-between">
                     <h1 className="font-semibold text-3xl">
-                        Income
+                        Expenses
                     </h1>
-                    <NewDepositForm />
+                    <NewExpenseForm />
                 </div>
-                <IncomeCard />
+                <ExpenseCard />
                 <Suspense>
-                    <IncomeCategoryChart incomeCategories={incomeCategories.map(
+                    <ExpenseCategoryChart expenseCategories={expenseCategories.map(
                         ({ category, amount}) => 
                         ({ category, amount: amount.toNumber()})
                     )}/>
@@ -28,11 +28,11 @@ const IncomePage = async () => {
                 <Suspense>
                     <Card>
                         <CardHeader>
-                            <CardTitle>Your Income History</CardTitle>
-                            <CardDescription>See all your past deposits.</CardDescription>
+                            <CardTitle>Your Expense History</CardTitle>
+                            <CardDescription>See all your past payments.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Deposits />
+                            <Expenses />
                         </CardContent>
                     </Card>
                 </Suspense>
@@ -41,4 +41,4 @@ const IncomePage = async () => {
     );
 }
  
-export default IncomePage;
+export default ExpensePage;

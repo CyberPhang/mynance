@@ -10,39 +10,39 @@ import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/compone
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { newTransactionSchema } from "@/lib/schemas";
-import { createNewDeposit } from "@/lib/actions";
+import { createNewExpense } from "@/lib/actions";
 import { useActionState } from "react";
 
-export function NewDepositForm() {
+export function NewExpenseForm() {
     const form = useForm<z.infer<typeof newTransactionSchema>>({
         resolver: zodResolver(newTransactionSchema),
         defaultValues: {
             amount: 0,
-            category: "earned",
+            category: "housing",
         }
     });
 
     const [errorMessage, formAction, isPending] = useActionState(
-        createNewDeposit,
+        createNewExpense,
         undefined,
     );
 
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant="secondary">New Deposit</Button>
+                <Button variant="secondary">New Expense</Button>
             </SheetTrigger>
             <SheetContent className="bg-background text-primary">
                 <SheetHeader>
                     <SheetTitle>
-                        New Deposit
+                        New Expense
                     </SheetTitle>
                     <SheetDescription>
-                        Enter the amount and the category for this deposit. Click create when you're done.
+                        Enter the amount and the category for this expense. Click create when you're done.
                     </SheetDescription>
                 </SheetHeader>
                 <Form {...form}>
-                    <form id="depositForm" action={formAction} className="space-y-8">
+                    <form id="expenseForm" action={formAction} className="space-y-8">
                         <div className="grid flex-1 auto-rows-min gap-6 px-4">
                             <FormField 
                                 control={form.control}
@@ -74,9 +74,10 @@ export function NewDepositForm() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="earned">Earned</SelectItem>
-                                                <SelectItem value="investments">Investments</SelectItem>
-                                                <SelectItem value="passive">Passive</SelectItem>
+                                                <SelectItem value="housing">Housing and Utilities</SelectItem>
+                                                <SelectItem value="groceries">Groceries</SelectItem>
+                                                <SelectItem value="entertainment">Shopping and Entertainment</SelectItem>
+                                                <SelectItem value="transportation">Transportation</SelectItem>
                                                 <SelectItem value="other">Other</SelectItem>
                                             </SelectContent>
                                         </Select>
@@ -89,7 +90,7 @@ export function NewDepositForm() {
                     </form>
                 </Form>
                 <SheetFooter>
-                    <Button type="submit" form="depositForm" disabled={isPending} variant="default">
+                    <Button type="submit" form="expenseForm" disabled={isPending} variant="default">
                         Create
                     </Button>
                 </SheetFooter>

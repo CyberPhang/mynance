@@ -1,6 +1,6 @@
 "use server";
 
-import { registerSchema, newDepositSchema } from "./schemas";
+import { registerSchema, newTransactionSchema } from "./schemas";
 import { auth, signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
@@ -90,7 +90,7 @@ export async function logout() {
     await signOut();
 }
 
-type DepositFormState = | {
+type TransactionFormState = | {
     errors?: {
         amount?: string[]
         category?: string[]
@@ -98,7 +98,7 @@ type DepositFormState = | {
     message?: string,
 } | undefined
 
-export async function createNewDeposit(state: DepositFormState, formData: FormData) {
+export async function createNewDeposit(state: TransactionFormState, formData: FormData) {
     const values = {
         amount: Number(formData.get("amount")),
         category: formData.get("category"),
@@ -106,7 +106,7 @@ export async function createNewDeposit(state: DepositFormState, formData: FormDa
 
     console.log("Action invoked");
 
-    const validatedFields = newDepositSchema.safeParse(values);
+    const validatedFields = newTransactionSchema.safeParse(values);
 
     if (!validatedFields.success) {
         return { errors: validatedFields.error.flatten().fieldErrors };
@@ -142,4 +142,50 @@ export async function createNewDeposit(state: DepositFormState, formData: FormDa
     revalidatePath("/dashboard/income");
     
     return { message: "Successfully deposited income" };
+}
+
+export async function createNewExpense(state: TransactionFormState, formData: FormData) {
+    const values = {
+        amount: Number(formData.get("amount")),
+        category: formData.get("category"),
+    };
+
+    console.log("Action invoked");
+
+    const validatedFields = newTransactionSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { errors: validatedFields.error.flatten().fieldErrors };
+    }
+
+    const session = await auth();
+
+    if (!session || !session.user || !session.user.id) {
+        return { message: "Something went wrong" };
+    }
+
+    const { amount, category } = validatedFields.data;
+
+    await db.balance.update({
+        where: {
+            userId: session.user.id,
+        },
+        data: {
+            amount: {
+                decrement: amount
+            }
+        }
+    });
+
+    await db.expense.create({
+        data: {
+            userId: session.user.id,
+            amount,
+            category,
+        }
+    });
+
+    revalidatePath("/dashboard/expenses");
+    
+    return { message: "Successfully added expense" };
 }

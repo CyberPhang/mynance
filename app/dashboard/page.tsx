@@ -14,6 +14,7 @@ import IncomeCategoryChart from "@/ui/income-category-chart";
 import ExpenseCategoryChart from "@/ui/expense-category-chart";
 import { font } from "@/ui/fonts";
 import IncomeCard from "@/ui/income-card";
+import ExpenseCard from "@/ui/expense-card";
 
 const DashboardPage = async () => { 
     const session = await auth();
@@ -37,19 +38,7 @@ const DashboardPage = async () => {
                 <Suspense fallback={<DashboardCardFallback />}>
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         <IncomeCard />
-                        <Card className="@container/card">
-                            <CardHeader>
-                                <CardDescription>Total Expenses</CardDescription>
-                                <CardTitle className="text-2xl text-destructive font-semibold tabular-nums @[250px]/card:text-3xl">
-                                    {USDollar.format(await getRecentExpenses(session?.user?.id))}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                                <div className="line-clamp-1 flex gap-2 font-medium text-muted-foreground">
-                                    Your expenses in the past 30 days <HiOutlineTrendingDown className="size-4" />
-                                </div>
-                            </CardFooter>
-                        </Card>
+                        <ExpenseCard />
                         <Card className="@container/card">
                             <CardHeader>
                                 <CardDescription>Current Balance</CardDescription>
