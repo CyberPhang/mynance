@@ -1,6 +1,6 @@
 "use server";
 
-import { registerSchema, newTransactionSchema } from "./schemas";
+import { registerSchema, newTransactionSchema, newBudgetSchema } from "./schemas";
 import { auth, signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
@@ -66,8 +66,12 @@ export async function signUp(state: FormState, formData: FormData) {
 
         await db.balance.create({
             data: {
-                userId: user.id,
                 amount: 0,
+                user: {
+                    connect: {
+                        id: user.id
+                    },
+                },
             },
         });
 
@@ -104,8 +108,6 @@ export async function createNewDeposit(state: TransactionFormState, formData: Fo
         category: formData.get("category"),
     };
 
-    console.log("Action invoked");
-
     const validatedFields = newTransactionSchema.safeParse(values);
 
     if (!validatedFields.success) {
@@ -126,17 +128,21 @@ export async function createNewDeposit(state: TransactionFormState, formData: Fo
         },
         data: {
             amount: {
-                increment: amount
-            }
-        }
+                increment: amount,
+            },
+        },
     });
 
     await db.income.create({
         data: {
-            userId: session.user.id,
             amount,
             category,
-        }
+            user: {
+                connect: {
+                    id: session.user.id,
+                },
+            },
+        },
     });
 
     revalidatePath("/dashboard/income");
@@ -150,8 +156,6 @@ export async function createNewExpense(state: TransactionFormState, formData: Fo
         category: formData.get("category"),
     };
 
-    console.log("Action invoked");
-
     const validatedFields = newTransactionSchema.safeParse(values);
 
     if (!validatedFields.success) {
@@ -172,20 +176,136 @@ export async function createNewExpense(state: TransactionFormState, formData: Fo
         },
         data: {
             amount: {
-                decrement: amount
-            }
-        }
+                decrement: amount,
+            },
+        },
     });
 
     await db.expense.create({
         data: {
-            userId: session.user.id,
             amount,
             category,
-        }
+            user: {
+                connect: {
+                    id: session.user.id,
+                },
+            },
+        },
     });
 
     revalidatePath("/dashboard/expenses");
     
     return { message: "Successfully added expense" };
+}
+
+type BudgetFormState = {
+    message?: string,
+    errors?: {
+        housing?: string[],
+        groceries?: string[],
+        entertainment?: string[],
+        transportation?: string[],
+        other?: string[],
+    }
+} | void
+
+export async function createNewBudget(state: BudgetFormState, formData: FormData) {
+    const values = {
+        housing: Number(formData.get("housing")),
+        groceries: Number(formData.get("groceries")),
+        entertainment: Number(formData.get("entertainment")),
+        transportation: Number(formData.get("transportation")),
+        other: Number(formData.get("other")),
+    }
+
+    const validatedFields = newBudgetSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { errors: validatedFields.error.flatten().fieldErrors }
+    }
+
+    const session = await auth();
+
+    if (!session || !session.user || !session.user.id) {
+        return { message: "Something went wrong" };
+    }
+
+    const now = new Date();
+    const splicedDate = now.toUTCString().split(" ");
+    const currMonth: string = splicedDate[2] + " " + splicedDate[3];
+
+    const budgetPeriod = await db.budgetPeriod.create({
+        data: {
+            month: currMonth,
+            user: { 
+                connect: { 
+                    id: session.user.id,
+                },
+            },
+        },
+    });
+    
+    const { housing, groceries, entertainment, transportation, other } = validatedFields.data;
+
+    await db.budgetCategory.create({
+        data: {
+            category: "housing",
+            amount: housing,
+            period: {
+                connect: {
+                    id: budgetPeriod.id,
+                },
+            },
+        }
+    });
+    
+    await db.budgetCategory.create({
+        data: {
+            category: "groceries",
+            amount: groceries,
+            period: {
+                connect: {
+                    id: budgetPeriod.id,
+                },
+            },
+        }
+    });
+
+    await db.budgetCategory.create({
+        data: {
+            category: "entertainment",
+            amount: entertainment,
+            period: {
+                connect: {
+                    id: budgetPeriod.id,
+                },
+            },
+        }
+    });
+
+    await db.budgetCategory.create({
+        data: {
+            category: "transportation",
+            amount: transportation,
+            period: {
+                connect: {
+                    id: budgetPeriod.id,
+                },
+            },
+        }
+    });
+
+    await db.budgetCategory.create({
+        data: {
+            category: "other",
+            amount: other,
+            period: {
+                connect: {
+                    id: budgetPeriod.id,
+                },
+            },
+        }
+    });
+
+    revalidatePath("/dashboard/budgeting");
 }

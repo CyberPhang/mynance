@@ -21,7 +21,7 @@ const ExpenseCard = async () => {
             </CardHeader>
             <CardFooter className="flex-col items-start gap-1.5 text-sm">
                 <div className="line-clamp-1 flex gap-2 font-medium text-muted-foreground">
-                    Your expenses in the past 30 days <HiOutlineTrendingDown className="size-4" />
+                    Your expenses for this month <HiOutlineTrendingDown className="size-4" />
                 </div>
             </CardFooter>
         </Card>

@@ -19,7 +19,7 @@ export async function getBalance(userId?: string) {
 // TODO: Make these operations O(1)
 export async function getRecentIncome(userId?: string) {
     const now = new Date();
-    const earliest = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 30);
+    const earliest = new Date(now.getFullYear(), now.getMonth());;
 
     const incomes = await db.income.findMany({ 
         where: { 
@@ -39,7 +39,7 @@ export async function getRecentIncome(userId?: string) {
 
 export async function getRecentExpenses(userId?: string) {
     const now = new Date();
-    const earliest = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 30);
+    const earliest = new Date(now.getFullYear(), now.getMonth());
 
     const expenses = await db.expense.findMany({ 
         where: { 
@@ -79,4 +79,35 @@ export async function getAllExpenseCategories(userId?: string) {
             userId,
         },
     });
+}
+
+export async function getCurrentBudget(userId?: string) {
+    const now = new Date();
+    
+    const budgetPeriod = await db.budgetPeriod.findFirst({
+        where: {
+            createdAt: {
+                gt: new Date(now.getFullYear(), now.getMonth()),
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    if (!budgetPeriod) {
+        return undefined;
+    }
+
+    const budgetCategories = await db.budgetCategory.findMany({
+        where: {
+            periodId: budgetPeriod.id,
+        },
+    });
+
+    let sum = 0;
+    for (const budget of budgetCategories) {
+        sum += budget.amount.toNumber();
+    }
+    return sum;
 }

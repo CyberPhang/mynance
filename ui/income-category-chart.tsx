@@ -85,7 +85,7 @@ const IncomeCategoryChart = (props: IncomeCategoryChartProps) => {
         <Card className="flex flex-col">
             <CardHeader>
                 <CardTitle>Your Income Sources</CardTitle>
-                <CardDescription>From the past 30 days</CardDescription>
+                <CardDescription>For this month</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0">
                 <ChartContainer

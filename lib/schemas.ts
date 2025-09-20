@@ -20,3 +20,11 @@ export const newTransactionSchema = z.object({
     amount: z.number().gt(0),
     category: z.string()
 });
+
+export const newBudgetSchema = z.object({
+    housing: z.number(),
+    groceries: z.number(),
+    entertainment: z.number(),
+    transportation: z.number(),
+    other: z.number(),
+});

@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
-import { columns, Deposit } from "./columns";
+import { columns, Transaction } from "./columns";
 import { DataTable } from "./data-table";
 import { auth } from "@/auth";
 
-async function getData(): Promise<Deposit[]> {
+async function getData(): Promise<Transaction[]> {
     const session = await auth();
 
     const rawData = await db.expense.findMany({
@@ -33,7 +33,7 @@ async function getData(): Promise<Deposit[]> {
     );
 }
 
-export default async function Deposits() {
+export default async function Expenses() {
     const data = await getData();
 
     return (

@@ -2,14 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-export type Deposit = {
+export type Transaction = {
     id: string,
     amount: number,
     category: string,
     date: string,
 }
 
-export const columns: ColumnDef<Deposit>[] = [
+export const columns: ColumnDef<Transaction>[] = [
     {
         accessorKey: "amount",
         header: () => <div className="text-right">Amount</div>,

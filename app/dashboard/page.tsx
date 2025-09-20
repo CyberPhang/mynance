@@ -1,33 +1,16 @@
-import { auth } from "@/auth";
 import { Suspense } from "react";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { HiOutlineTrendingDown } from "react-icons/hi";
-import { getBalance, getRecentIncome, getRecentExpenses, getAllIncomeCategories, getAllExpenseCategories } from "@/lib/db";
+import { getAllIncomeCategories, getAllExpenseCategories } from "@/lib/db";
 import DashboardCardFallback from "@/ui/dashboard-card-fallback";
 import IncomeCategoryChart from "@/ui/income-category-chart";
 import ExpenseCategoryChart from "@/ui/expense-category-chart";
 import { font } from "@/ui/fonts";
 import IncomeCard from "@/ui/income-card";
 import ExpenseCard from "@/ui/expense-card";
+import BalanceCard from "@/ui/balance-card";
 
 const DashboardPage = async () => { 
-    const session = await auth();
-    const balance = await getBalance(session?.user?.id);
     const incomeCategories = await getAllIncomeCategories();
     const expenseCategories = await getAllExpenseCategories();
-
-    const USDollar = new Intl.NumberFormat('en-us', {
-        style: "currency",
-        currency: "USD",
-    });
-
-    const parsedBalance = balance ? balance.toNumber() : 0;
 
     return ( 
         <div className="flex w-screen h-screen items-center justify-center ">
@@ -39,19 +22,7 @@ const DashboardPage = async () => {
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         <IncomeCard />
                         <ExpenseCard />
-                        <Card className="@container/card">
-                            <CardHeader>
-                                <CardDescription>Current Balance</CardDescription>
-                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                    {USDollar.format(parsedBalance)}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                                <div className="line-clamp-1 flex gap-2 font-medium text-muted-foreground">
-                                    Your total saved balance 
-                                </div>
-                            </CardFooter>
-                        </Card>
+                        <BalanceCard />
                     </div>
                 </Suspense>
                 <div className="grid gap-6 grid-cols-2">

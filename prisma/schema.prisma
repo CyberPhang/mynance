@@ -23,6 +23,11 @@ model User {
   image         String?
   password      String
   accounts      Account[]
+
+  expenses      Expense[]
+  income        Income[]
+  balance       Balance?
+  budgets       BudgetPeriod[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,20 +57,40 @@ model Account {
 model Income {
   id         String   @id @default(cuid())
   userId     String
+  user       User     @relation(fields: [userId], references: [id])
   createdAt  DateTime @default(now())
-  amount     Decimal
+  amount     Decimal  @db.Decimal(10, 2) 
   category   String
 }
 
 model Expense {
   id         String   @id @default(cuid())
   userId     String
+  user       User     @relation(fields: [userId], references: [id])
   createdAt  DateTime @default(now())
-  amount     Decimal
+  amount     Decimal  @db.Decimal(10, 2) 
   category   String
 }
 
 model Balance {
   userId     String   @id 
+  user       User     @relation(fields: [userId], references: [id])
   amount     Decimal  @default(0)
+}
+
+model BudgetPeriod {
+  id         Int              @id @default(autoincrement())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+  month      String
+  createdAt  DateTime         @default(now())
+  categories BudgetCategory[]
+}
+
+model BudgetCategory {
+  id       Int          @id @default(autoincrement())
+  periodId Int
+  period   BudgetPeriod @relation(fields: [periodId], references: [id])
+  category String
+  amount   Decimal      @db.Decimal(10, 2) 
 }
