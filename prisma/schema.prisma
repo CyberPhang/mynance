@@ -12,4 +12,85 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  accounts      Account[]
+
+  expenses      Expense[]
+  income        Income[]
+  balance       Balance?
+  budgets       BudgetPeriod[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+
+model Income {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  amount     Decimal  @db.Decimal(10, 2) 
+  category   String
+}
+
+model Expense {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  amount     Decimal  @db.Decimal(10, 2) 
+  category   String
+}
+
+model Balance {
+  userId     String   @id 
+  user       User     @relation(fields: [userId], references: [id])
+  amount     Decimal  @default(0)
+}
+
+model BudgetPeriod {
+  id         Int              @id @default(autoincrement())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+  month      String
+  createdAt  DateTime         @default(now())
+  categories BudgetCategory[]
+}
+
+model BudgetCategory {
+  id       Int          @id @default(autoincrement())
+  periodId Int
+  period   BudgetPeriod @relation(fields: [periodId], references: [id])
+  category String
+  amount   Decimal      @db.Decimal(10, 2) 
 }
