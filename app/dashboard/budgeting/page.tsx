@@ -24,9 +24,9 @@ const BudgetingPage = async () => {
                     <CardHeader>
                         <CardTitle>Your Budget Progress</CardTitle>
                         <CardDescription>
-                            See how you're keeping up with your budget this month. The progress 
-                            bar below shows how much of your budget you've used up. If no progress 
-                            bar appears, then you don't have an active budget, and you can create one 
+                            See how you&apos;re keeping up with your budget this month. The progress 
+                            bar below shows how much of your budget you&apos;ve used up. If no progress 
+                            bar appears, then you don&apos;t have an active budget, and you can create one 
                             by clicking the button on the top right.
                         </CardDescription>
                     </CardHeader>

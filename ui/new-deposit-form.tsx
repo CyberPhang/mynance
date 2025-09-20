@@ -38,7 +38,7 @@ export function NewDepositForm() {
                         New Deposit
                     </SheetTitle>
                     <SheetDescription>
-                        Enter the amount and the category for this deposit. Click create when you're done.
+                        Enter the amount and the category for this deposit. Click create when you&apos;re done.
                     </SheetDescription>
                 </SheetHeader>
                 <Form {...form}>

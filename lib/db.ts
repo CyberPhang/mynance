@@ -23,6 +23,7 @@ export async function getRecentIncome(userId?: string) {
 
     const incomes = await db.income.findMany({ 
         where: { 
+            userId,
             createdAt: {
                 gt: earliest,
             },
@@ -43,6 +44,7 @@ export async function getRecentExpenses(userId?: string) {
 
     const expenses = await db.expense.findMany({ 
         where: { 
+            userId,
             createdAt: {
                 gt: earliest,
             },
@@ -86,6 +88,7 @@ export async function getCurrentBudget(userId?: string) {
     
     const budgetPeriod = await db.budgetPeriod.findFirst({
         where: {
+            userId,
             createdAt: {
                 gt: new Date(now.getFullYear(), now.getMonth()),
             },

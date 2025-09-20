@@ -23,7 +23,7 @@ async function getData(): Promise<Transaction[]> {
         }
     }
 
-    return rawData.map(({ id, createdAt, userId, amount, category }) => 
+    return rawData.map(({ id, createdAt, amount, category }) => 
         ({
             id,
             amount: amount.toNumber(),

@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/card"
 import Link from "next/link";
 import { font } from "./fonts";
-import { FcGoogle } from 'react-icons/fc';
 import { useActionState } from "react";
 import { authenticate } from "@/lib/actions";
 
@@ -104,7 +103,7 @@ const LoginForm = () => {
                 <CardFooter className="flex flex-col gap-2">
                     <Button className="w-full cursor-pointer text-muted-foreground" variant="link" asChild>
                         <Link href="/register">
-                            Don't have an account?
+                            Don&apos;t have an account?
                         </Link>
                     </Button>
                 </CardFooter>

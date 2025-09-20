@@ -65,7 +65,7 @@ const ExpenseCategoryChart = (props: ExpenseCategoryChartProps) => {
         },
     } satisfies ChartConfig;
 
-    let expenseCategoryData = [
+    const expenseCategoryData = [
         {type: "housing", amount: 0},
         {type: "groceries", amount: 0},
         {type: "entertainment", amount: 0},
@@ -110,7 +110,7 @@ const ExpenseCategoryChart = (props: ExpenseCategoryChartProps) => {
                             dataKey="amount" 
                             nameKey="type"
                         >
-                            {expenseCategoryData.map((entry, index) => (
+                            {expenseCategoryData.map((entry) => (
                                 <Cell 
                                     key={`cell-${entry.type}`} 
                                     fill={expenseCategoryConfig[entry.type as keyof expenseCategoryConfigType].color} 

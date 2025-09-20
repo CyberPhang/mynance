@@ -38,7 +38,7 @@ export function NewExpenseForm() {
                         New Expense
                     </SheetTitle>
                     <SheetDescription>
-                        Enter the amount and the category for this expense. Click create when you're done.
+                        Enter the amount and the category for this expense. Click create when you&apos;re done.
                     </SheetDescription>
                 </SheetHeader>
                 <Form {...form}>

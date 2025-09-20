@@ -11,20 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { HiOutlineTrendingUp, HiOutlineTrendingDown } from "react-icons/hi";
-import { ChartContainer } from "@/components/ui/chart";
-import { PieChart } from "recharts";
 import IncomeCategoryChart from "@/ui/income-category-chart";
 import ExpenseCategoryChart from "@/ui/expense-category-chart";
 
 export default function Home() {
-
-  const chartData = [
-    { type: "earned", amount: 4000 },
-    { type: "investments", amount: 1250 },
-    { type: "passive", amount: 500 },
-    { type: "other", amount: 250 },
-  ];
-
   return (
     <>
       <Suspense>

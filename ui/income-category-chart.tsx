@@ -57,7 +57,7 @@ const IncomeCategoryChart = (props: IncomeCategoryChartProps) => {
         },
     } satisfies ChartConfig;
 
-    let incomeCategoryData = [
+    const incomeCategoryData = [
         {type: "earned", amount: 0},
         {type: "investments", amount: 0},
         {type: "passive", amount: 0},
@@ -98,7 +98,7 @@ const IncomeCategoryChart = (props: IncomeCategoryChartProps) => {
                             dataKey="amount" 
                             nameKey="type"
                         >
-                            {incomeCategoryData.map((entry, index) => (
+                            {incomeCategoryData.map((entry) => (
                                 <Cell 
                                     key={`cell-${entry.type}`}
                                     fill={incomeCategoryConfig[entry.type as keyof incomeCategoryConfigType].color}

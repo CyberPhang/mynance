@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/card"
 import Link from "next/link";
 import { font } from "./fonts";
-import { FcGoogle } from 'react-icons/fc';
 import { signUp } from "@/lib/actions";
 import { useActionState } from "react";
 
